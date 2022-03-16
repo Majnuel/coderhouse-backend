@@ -13,7 +13,7 @@ class Contenedor {
         ParsedData.push(product);
         await fs.writeFile("./libreria.txt", JSON.stringify(ParsedData));
       } catch (err) {
-        //si hay error porque no existe el archivo, lo crea y guarda el producto:
+        //si hay error es porque no existe el archivo, lo crea y guarda el producto:
         async function saveData() {
           try {
             product.id = 1;
