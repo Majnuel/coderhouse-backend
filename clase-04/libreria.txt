@@ -1,0 +1,1 @@
+[{"title":"escuadra","price":4,"thumbnail":"https://place-hold.it/300x500","id":1},{"title":"cuaderno","price":6,"thumbnail":"https://place-hold.it/300x500","id":2},{"title":"lapiz","price":2,"thumbnail":"https://place-hold.it/300x500","id":3}]

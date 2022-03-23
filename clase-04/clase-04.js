@@ -89,11 +89,11 @@ class Contenedor {
 // *********** Si corro el programa con los 3 productos descomentados (para que ingrese los 3 al txt al inicio), no lo hace bien, tengo que ingresarlos de a uno, aunque la funcion tenga await ******
 
 const MiDB = new Contenedor("Libreria");
-MiDB.save({
-  title: "escuadra",
-  price: 4,
-  thumbnail: "https://place-hold.it/300x500",
-});
+// MiDB.save({
+//   title: "escuadra",
+//   price: 4,
+//   thumbnail: "https://place-hold.it/300x500",
+// });
 
 // MiDB.save({
 //   title: "cuaderno",
