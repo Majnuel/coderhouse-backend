@@ -40,7 +40,7 @@ class Contenedor {
     try {
       AllData().then((data) => {
         const Product = data.find((element) => element.id === id);
-        // console.log(Product);
+        console.log(Product);
         return Product;
       });
     } catch (error) {
@@ -110,7 +110,7 @@ const MiDB = new Contenedor("Libreria");
 
 // console.log(MiDB.getAll());
 
-// console.log(MiDB.getById(1));
+MiDB.getById(1).then((data) => console.log(data));
 
 // MiDB.deleteAll();
 
@@ -120,10 +120,10 @@ app.get("/", (req, res) => {
 
 app.get("/productos", (req, res) => {
   const printAllProducts = async () => {
-    const products = await MiDB.getAll();
+    // const products = await MiDB.getAll();
     return await MiDB.getAll();
   };
-  console.log(printAllProducts());
+  // console.log(printAllProducts());
   const products = printAllProducts();
   res.send(JSON.stringify(products));
 });
