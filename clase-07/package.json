@@ -1,0 +1,21 @@
+{
+  "name": "clase-07",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ejercicio-1": "nodemon ejercicio-1.js",
+    "ejercicio-2": "nodemon ejercicio-2.js",
+    "ejercicio-3": "nodemon ejercicio-3.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
