@@ -1,0 +1,41 @@
+html
+    head
+        title="this is a message in the head tag"
+    body
+        h1="Desafio entregable CoderHouse"
+        h6="thumbnail-url: https://cdn2.iconfinder.com/data/icons/atomic-nuclear-age/252/atomic-nuclear-age-11-512.png"
+        div
+            form(action="/productos" method="post")
+                h3="Formulario de ingreso de producto:"
+                div
+                    label(for="title")="Nombre del producto"
+                    input(type="text" name="title")
+                div
+                    label(for="price")="Precio del producto"
+                    input(type="number" name="price")
+                div
+                    label(for="thumbnail")="Imagen del producto (url)"
+                    input(type="text" name="thumbnail")
+                input(type="submit" value="submit")
+        div
+            if products
+                table(border= "1px solid black")
+                    thead
+                        tr
+                            th(colspan="3")="Lista de productos en servidor"
+                        tr
+                            th="Name"
+                            th="Price"
+                            th="Picture"
+                    tbody
+                        each val in products
+                            tr
+                                td=val.title
+                                td=val.price
+                                td
+                                    img(src=val.thumbnail style= "height: 40px")
+            else
+                p="there are no products in server"
+
+
+
