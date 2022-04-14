@@ -1,0 +1,54 @@
+html
+    head
+        title="this is a message in the head tag"
+        link(rel="stylesheet", href="style.css")
+    body
+        h1(class="test")="Desafio entregable clase-12 CoderHouse"
+        h6="thumbnail-url: https://cdn2.iconfinder.com/data/icons/atomic-nuclear-age/252/atomic-nuclear-age-11-512.png"
+        div
+            h3="Formulario de ingreso de producto:"
+            div
+                label(for="title")="Nombre del producto"
+                input(id="nameInput" type="text" name="title")
+            div
+                label(for="price")="Precio del producto"
+                input(id="priceInput" type="number" name="price")
+            div
+                label(for="thumbnail")="Imagen del producto (url)"
+                input(id="thumbnailInput" type="text" name="thumbnail")
+            button(id="sendNewProduct")="Ingresar producto"
+        div
+            if products
+                table(border= "1px solid black")
+                    thead
+                        tr
+                            th(colspan="3")="Lista de productos en servidor"
+                        tr
+                            th="Name"
+                            th="Price"
+                            th="Picture"
+                    tbody(id="tableBody")
+                        each val in products
+                            tr
+                                td=val.name
+                                td=val.price
+                                td
+                                    img(src=val.thumbnail style= "height: 40px")
+            else
+                p="there are no products in server"
+        div
+            h3="Chat"
+            div
+                label(for="email")="email"
+                input(id="emailInput" type="email" name="email")
+            div
+                label(for="message")="Mensaje"
+                input(id="messageInput" type="text" name="message")
+                button(id="messageButton")="send message"
+            div(id="messages")
+                h6="mensajes:"
+
+        script(src="/socket.io/socket.io.js")
+        script(src="main4Pug.js")
+
+
