@@ -12,6 +12,7 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:id", (req, res) => {
+  console.log(req.params);
   const allProducts = instanciaProductos.getAll();
   const product = allProducts.filter((element) => element.id === req.params.id);
   if (!product.length) {

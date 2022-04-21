@@ -8,7 +8,7 @@ const publicDirPath = path.resolve(__dirname, "../static");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-let port = 8080;
+let port = 8081;
 server = app.listen(port, () => {
   console.log("SERVER RUNNING ON PORT: ", port);
 });
