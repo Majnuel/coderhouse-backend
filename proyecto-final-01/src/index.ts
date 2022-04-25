@@ -4,20 +4,6 @@ import { mainRouter } from "./routes/mainRouter";
 
 const port = process.env.PORT || 8080;
 
-// NO FUNCIONA:
-// const admin = false;
-// function isAdmin(
-//   req: express.Request,
-//   res: express.Response,
-//   next: express.NextFunction
-// ) {
-//   if (admin) {
-//     next();
-//   } else {
-//     res.status(401).json({ msg: "not authorized" });
-//   }
-// }
-
 // middlewares:
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -37,5 +23,3 @@ const server = app.listen(port, () => {
 server.on("error", (err) => {
   console.log("ERROR: ", err);
 });
-
-// export { isAdmin };

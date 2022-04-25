@@ -1,20 +1,7 @@
 import express from "express";
 const productsRouter = express.Router();
 import myProducts from "../controllers/products";
-// import { isAdmin } from "../index";
-
-const admin = false;
-function isAdmin(
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction
-) {
-  if (admin) {
-    next();
-  } else {
-    res.status(401).json({ msg: "not authorized" });
-  }
-}
+import { isAdmin } from "../middlewares/isAdmin";
 
 productsRouter.get("/:id?", async (req, res) => {
   //si no hay nada en params responde con la lista de todos los productos
