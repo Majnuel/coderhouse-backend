@@ -1,12 +1,13 @@
-import express from "express";
-const http = require("http");
-const app = express();
-const io = require("socket.io");
+import * as express from "express";
+import * as http from "http";
+import * as socketio from "socket.io";
+const app = express.default();
+
 import { mainRouter } from "./routes/mainRouter";
 
-//para socket.io:
-const myServer = http.createServer(app);
-const myWSServer = io(myServer);
+// socket.io:
+const server = http.createServer(app);
+const io = new socketio.Server(server);
 
 const port = process.env.PORT || 8080;
 
@@ -27,7 +28,7 @@ const productArray = [
   },
 ];
 
-myWSServer.on("connection", (socket: any) => {
+io.on("connection", (socket: any) => {
   console.log("socket connection established");
   console.log("SERVER SOCKET ID: ", socket.id);
   console.log("CLIENT SOCKET ID: ", socket.client.id);
@@ -44,7 +45,7 @@ myWSServer.on("connection", (socket: any) => {
       msg: msg.msg,
       time: new Date(),
     };
-    myWSServer.emit("emitNewMessage", message);
+    io.emit("emitNewMessage", message);
     // const history = async () => {
     //   const data = fs.readFile("src/chatHistory.json", "utf-8");
     //   return data;
@@ -59,17 +60,18 @@ myWSServer.on("connection", (socket: any) => {
     // socket.broadcast.emit("messageFromServer", {message})
   });
 
+  //nuevo producto agregado:
   socket.on("newProduct", (product: any) => {
     // const newProduct = {
     //   id: uuidv4(),
     //   ...product,
     // };
     // productArray.push(newProduct);
-    myWSServer.emit("refreshList", productArray);
+    io.emit("refreshList", productArray);
   });
 
   // will send to every client:
-  myWSServer.emit("productList", productArray);
+  io.emit("productList", productArray);
 });
 
 // middlewares:
@@ -91,7 +93,7 @@ app.use((req, res) => {
   });
 });
 
-const server = app.listen(port, () => {
+server.listen(port, () => {
   console.log("SERVER UP AND RUNNING ON PORT: ", port);
 });
 
