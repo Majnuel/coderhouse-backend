@@ -1,14 +1,14 @@
 import fs from "fs/promises";
-import { v4 as uuidv4 } from "uuid";
+
+import { productsDBConfig } from "../../db/knexConfig";
+const knex = require("knex")(productsDBConfig);
 
 interface Product {
   name: string;
   description: string;
   price: number;
   stock: number;
-  thumbnailURL: string;
-  id: string;
-  timestamp: number;
+  thumbnail: string;
 }
 
 class Products {
@@ -17,28 +17,54 @@ class Products {
     this.file = input_file;
   }
 
-  async getData() {
-    const data = await fs.readFile(this.file, "utf-8");
-    return JSON.parse(data);
+  init() {
+    console.log("products DB up");
+    knex.schema.hasTable("products").then((exists: boolean) => {
+      if (exists) return;
+      console.log("products table doesnt exist, creating table...");
+      knex.schema
+        .createTable("products", (table: any) => {
+          table.increments("id");
+          table.string("name").notNullable();
+          table.decimal("price", 6, 2).notNullable();
+          table.string("description").notNullable();
+          table.integer("stock").notNullable();
+          table.string("thumbnail").notNullable();
+          table.timestamps(true, true);
+        })
+        .then(() => console.log("products table created"))
+        .catch((err: any) => console.log("there has been an error", err));
+    });
+    knex("products")
+      .select("*")
+      .then((products: any) =>
+        console.log(`found ${products.length} product-records in products-DB`)
+      );
   }
 
-  async saveData(newData: Array<Product>) {
-    await fs.writeFile(this.file, JSON.stringify(newData, null, "\t"));
+  getAllProducts() {
+    return knex("products").select("*");
   }
 
-  async addProduct(newProduct: any) {
-    const products = await this.getData();
-    const newData: Product = {
+  getProductById(id: number) {
+    return knex("products").select("*").where("id", "=", id);
+  }
+
+  addProduct(newProduct: any) {
+    const product: Product = {
       name: newProduct.name,
       description: newProduct.description,
       stock: newProduct.stock,
       price: newProduct.price,
-      thumbnailURL: newProduct.thumbnailURL,
-      id: uuidv4(),
-      timestamp: Date.now(),
+      thumbnail: newProduct.thumbnail,
     };
-    products.push(newData);
-    await this.saveData(products);
+    return knex("products").insert(product);
+  }
+
+  //************ */ DELETE, IF DONE NOW IT BREAKS EVERYTHING
+  async getData() {
+    const data = await fs.readFile(this.file, "utf-8");
+    return JSON.parse(data);
   }
 
   async getProduct(id: string) {
@@ -48,6 +74,7 @@ class Products {
     );
     return productToBeFound;
   }
+  // *********************************
 
   async updateProduct(
     id: string,
@@ -55,35 +82,22 @@ class Products {
     description: string,
     stock: number,
     price: number,
-    thumbnailURL: string
+    thumbnail: string
   ) {
-    const allProducts = await this.getData();
-    const product = allProducts.find((element: any) => element.id === id);
-    if (!product) {
-      return false;
-    } else {
-      const index = allProducts.findIndex((element: any) => element.id === id);
-      allProducts[index].name = name;
-      allProducts[index].description = description;
-      allProducts[index].stock = stock;
-      allProducts[index].price = price;
-      allProducts[index].thumbnailURL = thumbnailURL;
-      allProducts[index].timestamp = Date.now();
-      await this.saveData(allProducts);
-      return true;
-    }
+    const newData = {
+      name: name,
+      description: description,
+      stock: stock,
+      price: price,
+      thumbnail: thumbnail,
+    };
+    return knex("products")
+      .where("id", "=", id)
+      .update({ ...newData });
   }
 
   async deleteProduct(id: string) {
-    const allProducts = await this.getData();
-    const index = allProducts.findIndex((element: any) => element.id == id);
-    allProducts.splice(index, 1);
-    await this.saveData(allProducts);
-    if (index < 0) {
-      return false;
-    } else {
-      return true;
-    }
+    return knex("products").where("id", "=", id).del();
   }
 }
 

@@ -1,6 +1,6 @@
 import express from "express";
 
-const admin = false;
+const admin = true;
 function isAdmin(
   req: express.Request,
   res: express.Response,

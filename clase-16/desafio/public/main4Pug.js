@@ -35,21 +35,20 @@ const renderProducts = (parentId, data) => {
 const renderMessages = (parentId, data) => {
   const newDiv = document.createElement("div");
   newDiv.innerHTML = `<div>
-  <span>* ${data.author}</span>
-  <span>(@${data.time}):</span>
-  <span>${data.msg}</span>
+  <span>* ${data.author}:</span>
+  <span>${data.message}</span>
   </div>`;
   document.getElementById(`${parentId}`).appendChild(newDiv);
 };
 
-sendNewProduct.addEventListener("click", () => {
-  const newProduct = {
-    name: nameInput.value,
-    price: priceInput.value,
-    thumbnail: thumbnailInput.value,
-  };
-  socket.emit("newProduct", newProduct);
-});
+// sendNewProduct.addEventListener("click", () => {
+//   const newProduct = {
+//     name: nameInput.value,
+//     price: priceInput.value,
+//     thumbnail: thumbnailInput.value,
+//   };
+//   socket.emit("newProduct", newProduct);
+// });
 
 messageButton.addEventListener("click", () => {
   if (emailInput.value === "") {
@@ -58,7 +57,7 @@ messageButton.addEventListener("click", () => {
     alert("Debe ingresar mensaje");
   } else {
     const newMessage = {
-      msg: messageInput.value,
+      message: messageInput.value,
       email: emailInput.value,
     };
     socket.emit("newMessage", newMessage);

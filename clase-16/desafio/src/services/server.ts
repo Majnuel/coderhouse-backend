@@ -2,12 +2,16 @@ import * as express from "express";
 import * as http from "http";
 import * as socketio from "socket.io";
 const app = express.default();
+import messageResources from "../controllers/messages";
+import myProducts from "../controllers/products";
 
-import { mainRouter } from "./routes/mainRouter";
+import { mainRouter } from "../routes/mainRouter";
 
-// socket.io:
 const server = http.createServer(app);
-const io = new socketio.Server(server);
+export const io = new socketio.Server(server);
+
+messageResources.init();
+myProducts.init();
 
 const port = process.env.PORT || 8080;
 
@@ -37,41 +41,26 @@ io.on("connection", (socket: any) => {
     socket.emit("sendProducts", productArray);
   });
 
-  // nuevo mensaje de chat
+  // nuevo mensaje de chat enviado al servidor
   socket.on("newMessage", (msg: any) => {
-    console.log(`client with id ${socket.client.id} envió un mensaje: `, msg);
+    console.log(`client with id ${socket.client.id} sent a message: `, msg);
     const message = {
       author: msg.email,
-      msg: msg.msg,
-      time: new Date(),
+      message: msg.message,
     };
+    //reenvio el mensaje al resto de los clientes
     io.emit("emitNewMessage", message);
-    // const history = async () => {
-    //   const data = fs.readFile("src/chatHistory.json", "utf-8");
-    //   return data;
-    // };
-    // history().then(async (data) => {
-    //   const parsedData = JSON.parse(data);
-    //   parsedData.push(message);
-    //   fs.writeFile("src/chatHistory.json", JSON.stringify(parsedData));
-    // });
-
-    // will send a message to all clients except to who send the newMessage
-    // socket.broadcast.emit("messageFromServer", {message})
+    // guardo el mensaje en la DB de mensajes (sqlite3)
+    messageResources.addMessage(message);
   });
 
   //nuevo producto agregado:
-  socket.on("newProduct", (product: any) => {
-    // const newProduct = {
-    //   id: uuidv4(),
-    //   ...product,
-    // };
-    // productArray.push(newProduct);
-    io.emit("refreshList", productArray);
-  });
+  // socket.on("newProduct", (product: any) => {
+  //   io.emit("refreshList", productArray);
+  // });
 
   // will send to every client:
-  io.emit("productList", productArray);
+  // io.emit("productList", productArray);
 });
 
 // middlewares:
@@ -84,7 +73,7 @@ app.use(express.static("public"));
 app.use("/api", mainRouter);
 
 app.get("/", (req, res) => {
-  res.render("index.pug", { products: productArray });
+  res.render("index.pug");
 });
 
 app.use((req, res) => {
