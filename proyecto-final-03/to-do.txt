@@ -1,0 +1,1 @@
+fijarse en el repo de ccineto, en la clase 22 cómo sacó socket.io del server y lo puso en su propio archivo
