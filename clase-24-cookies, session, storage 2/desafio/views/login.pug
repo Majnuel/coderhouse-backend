@@ -1,0 +1,13 @@
+html
+    head
+        title="this is a message in the head tag"
+        link(rel="stylesheet", href="style.css")
+    body
+        div
+            h1="Login de Usuario"
+            form(action="/login" method="POST")
+                label(for="userName")="Nombre:"
+                input(name="userName" type="text" id="userName")
+                button(id="sendUserID")="Enviar"
+
+
