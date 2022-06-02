@@ -1,0 +1,38 @@
+{
+  "name": "clase-10",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-dev": "nodemon src/services/server.js",
+    "transpile": "babel src --out-dir dist",
+    "start": "node ./dist/index.js",
+    "dev": "nodemon --exec babel-node ./src/services/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/cli": "^7.14.8",
+    "@babel/core": "^7.14.8",
+    "@babel/node": "^7.14.7",
+    "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/preset-env": "^7.14.8",
+    "@faker-js/faker": "^6.3.1",
+    "connect-mongo": "^4.6.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.1",
+    "express": "^4.17.3",
+    "express-session": "^1.17.3",
+    "mongoose": "^6.3.4",
+    "normalizr": "^3.6.2",
+    "pug": "^3.0.2",
+    "socket.io": "^4.4.1",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@babel/runtime": "^7.15.4",
+    "nodemon": "^2.0.15"
+  }
+}
