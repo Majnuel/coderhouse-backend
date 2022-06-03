@@ -1,14 +1,46 @@
+import passport from "passport";
 import { Router } from "express";
-import validateLogIn from "../middlewares/validateLogIn";
-import users from "../utils/users";
 import productArray from "../utils/productArray";
+import { isLoggedIn } from "../middlewares/auth";
+import UserRouter from "./user";
+import validateFields from "../middlewares/validateFields";
+import util from "util";
+
+console.log(util.inspect(validateFields, true, 7, true));
 
 const router = Router();
 
-router.get("/", validateLogIn, (req, res) => {
+router.use("/user", isLoggedIn, UserRouter);
+
+const passportOptions = { badRequestMessage: "Falta username / password" };
+
+router.post(
+  "/login",
+  passport.authenticate("login", passportOptions),
+  function (req, res) {
+    console.log("user: ", req.user);
+    // res.json({ msg: "Welcome!", user: req.user });
+    res.redirect("/");
+  }
+);
+
+router.post("/signup", validateFields, (req, res, next) => {
+  passport.authenticate("signup", passportOptions, (err, user, info) => {
+    console.log("Info SIGNUP");
+    console.log(err, user, info);
+    if (err) {
+      return next(err);
+    }
+    if (!user) return res.status(401).json({ data: info });
+
+    res.json({ msg: "signup OK" });
+  })(req, res, next);
+});
+
+router.get("/", isLoggedIn, (req, res) => {
   res.render("index.pug", {
     products: productArray,
-    username: req.session.info.username,
+    username: req.user.username,
   });
 });
 
@@ -24,28 +56,18 @@ router.get("/api/productos-test", (req, res) => {
   res.status(200).json(productArray);
 });
 
-router.post("/login", (req, res) => {
-  const { userName, password } = req.body;
-  const index = users.findIndex((user) => user.username === userName);
-  if (index === -1) {
-    res.status(401).json({ msg: "usuario no se encuentra autorizado" });
-  } else {
-    const user = users[index];
-    req.session.info = {
-      loggedIn: true,
-      username: user.username,
-      admin: user.admin,
-    };
-    res.redirect("/");
-  }
+router.post("/logout", (req, res, next) => {
+  console.log("logout endpoint reached");
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/login");
+  });
 });
 
-router.get("/logout", (req, res) => {
-  console.log("logout endpoint reached");
-  req.session.destroy((err) => {
-    if (!err) res.json("Logout ok!");
-    else res.send({ status: "Logout ERROR", body: err });
-  });
+router.get("/missing-fields", (req, res) => {
+  res.render("user-exists");
 });
 
 export default router;

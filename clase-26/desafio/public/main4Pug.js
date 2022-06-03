@@ -142,15 +142,14 @@ messageButton.addEventListener("click", () => {
   }
 });
 
-logoutBtn.addEventListener("click", () => {
-  console.log("logout clicked");
-  try {
-    fetch("/logout")
-      .then((response) => {
-        console.log(response);
-      })
-      .then(() => (location.href = "/login"));
-  } catch (err) {
-    console.log(err);
-  }
-});
+// logoutBtn.addEventListener("click", () => {
+//   console.log("logout clicked");
+//   try {
+//     fetch("/logout").then((response) => {
+//       console.log(response);
+//     });
+//     // .then(() => (location.href = "/login"));
+//   } catch (err) {
+//     console.log(err);
+//   }
+// });

@@ -6,8 +6,11 @@ html
         div
             h1="Login de Usuario"
             form(action="/login" method="POST")
-                label(for="userName")="email:"
-                input(name="userName" type="text" id="userName")
+                label(for="username")="email:"
+                input(name="username" type="text" id="userName")
                 label(for="password")="password"
                 input(name="password" type="password" id="password")
                 button(id="sendUserID")="Enviar"
+        div
+            p="Dont have an account?"
+            a(href="/signup")="Sign up"

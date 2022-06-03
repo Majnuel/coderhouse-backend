@@ -1,8 +1,6 @@
 const express = require("express");
 const app = express();
-import * as util from "util";
 import { normalize, schema } from "normalizr";
-const fs = require("fs/promises");
 const { v4: uuidv4 } = require("uuid");
 const http = require("http");
 const io = require("socket.io");
@@ -14,8 +12,10 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import router from "../routes/index";
 import { productArray } from "../utils/productArray";
+import { signUpFunc, loginFunc } from "./auth";
+import passport from "passport";
 
-const ttlInSeconds = 60;
+const ttlInSeconds = 10;
 
 const StoreOptions = {
   store: MongoStore.create({
@@ -75,6 +75,19 @@ app.use(express.urlencoded({ extended: true }));
 // cookies and session:
 app.use(cookieParser());
 app.use(session(StoreOptions));
+
+//Indicamos que vamos a usar passport en todas nuestras rutas
+app.use(passport.initialize());
+
+//Permitimos que passport pueda manipular las sessiones de nuestra app
+app.use(passport.session());
+
+// loginFunc va a ser una funcion que vamos a crear y va a tener la logica de autenticacion
+// Cuando un usuario se autentique correctamente, passport va a devolver en la session la info del usuario
+passport.use("login", loginFunc);
+
+//signUpFunc va a ser una funcion que vamos a crear y va a tener la logica de registro de nuevos usuarios
+passport.use("signup", signUpFunc);
 
 app.use("/", router);
 

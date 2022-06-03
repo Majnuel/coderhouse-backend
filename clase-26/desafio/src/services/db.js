@@ -6,7 +6,7 @@ const initMongoDB = async () => {
   try {
     console.log("Conectando a MongoDB...");
     await mongoose.connect(
-      `mongodb+srv://${config.MONGO_USR}:${config.MONGO_PWD}@cluster0.ydcxa.mongodb.net/?retryWrites=true&w=majority`
+      `mongodb+srv://${config.MONGO_USR}:${config.MONGO_PWD}@cluster0.ydcxa.mongodb.net/${config.MONGO_DB}?retryWrites=true&w=majority`
     );
     console.log("CONECTADO EXITOSAMENTE A MONGO!");
   } catch (err) {

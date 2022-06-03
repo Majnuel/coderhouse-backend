@@ -3,10 +3,11 @@ html
         title="this is a message in the head tag"
         link(rel="stylesheet", href="style.css")
     body
-        h1(class="test")="Desafio entregable clase-22 CoderHouse"
+        h1(class="test")="Desafio entregable clase-26 CoderHouse"
         div
-            h2=`Bienvenido ${username}`
-            button(id="logoutBtn")="logout"
+            h2=`Bienvenid@ ${username}`
+            form(action="/logout", method="POST")
+                button(id="logoutBtn")="logout"
         //- div
         //-     h3="Formulario de ingreso de producto:"
         //-     div

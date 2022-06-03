@@ -6,7 +6,6 @@ export default {
   MONGO_PWD: process.env.MONGO_PWD || "PASSWORD",
   MONGO_STR: process.env.MONGO_STR || "mongodb://localhost:27017/clase-24",
   MONGO_USR: process.env.MONGO_USR || "USER",
+  MONGO_DB: process.env.MONGO_DB || "test",
   PORT: process.env.PORT || 8080,
 };
-
-export const testvariable = 90;
