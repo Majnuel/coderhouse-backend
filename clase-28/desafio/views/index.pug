@@ -1,0 +1,74 @@
+html
+    head
+        title="this is a message in the head tag"
+        link(rel="stylesheet", href="style.css")
+    body
+        h1(class="test")="Desafio entregable clase-26 CoderHouse"
+        div
+            h2=`Bienvenid@ ${username}`
+            form(action="/logout", method="POST")
+                button(id="logoutBtn")="logout"
+        //- div
+        //-     h3="Formulario de ingreso de producto:"
+        //-     div
+        //-         label(for="title")="Nombre del producto"
+        //-         input(id="nameInput" type="text" name="title")
+        //-     div
+        //-         label(for="price")="Precio del producto"
+        //-         input(id="priceInput" type="number" name="price")
+        //-     div
+        //-         label(for="thumbnail")="Imagen del producto (url)"
+        //-         input(id="thumbnailInput" type="text" name="thumbnail")
+        //-     button(id="sendNewProduct")="Ingresar producto"
+        div
+            table(border= "1px solid black")
+                thead
+                    tr
+                        th(colspan="3")="Lista de productos en servidor (usando Faker)"
+                    tr
+                        th="Name"
+                        th="Price"
+                        th="Picture"
+                tbody(id="productsTableBody")
+
+        div
+            h3="Chat"
+            div
+                label(for="email")="Email:"
+                input(id="emailInput" type="email" name="email")
+            div
+                label(for="nombre")="Nombre:"
+                input(id="nombreInput" type="text" name="nombre")
+            div
+                label(for="apellido")="Apellido:"
+                input(id="apellidoInput" type="text" name="apellido")
+            div
+                label(for="edad")="Edad:"
+                input(id="edadInput" type="number" name="edad")
+            div
+                label(for="alias")="Alias:"
+                input(id="aliasInput" type="text" name="alias")
+            div
+                label(for="avatar")="Avatar:"
+                input(id="avatarInput" type="text" name="avatar")
+            div
+                label(for="message")="Mensaje:"
+                input(id="messageInput" type="text" name="message")
+            div
+                button(id="messageButton")="send message"
+            p="send message and refresh to render in table:"
+            table(border= "1px solid black" id="messagesTableDiv")
+                    thead
+                        tr
+                            th(colspan="3")="Messages"
+                        tr
+                            th="user"
+                            th="id"
+                            th="message"
+                    tbody(id="messagestTableBody")
+
+        script(src="/socket.io/socket.io.js")
+        script(src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js")
+        script(src="main4Pug.js")
+
+
