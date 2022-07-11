@@ -1,8 +1,12 @@
 import passport from "passport";
-import { Strategy as LocalStrategy } from "passport-local";
+import {
+  Strategy,
+  VerifyFunctionWithRequest,
+  IStrategyOptionsWithRequest,
+} from "passport-local";
 import { userModel } from "../models/users";
 
-const strategyOptions = {
+const strategyOptions: IStrategyOptionsWithRequest = {
   usernameField: "username",
   passwordField: "password",
   passReqToCallback: true,
@@ -15,11 +19,18 @@ const strategyOptions = {
  * Si no hay match pasamos como segundo argumento false (eso indica que no encontramos un usuario con esa data).
  * Opcionalmente podemos mandar como tercer argumento un mensaje de error
  */
-const login = async (req: any, username: any, password: any, done: any) => {
+const login: VerifyFunctionWithRequest = async (
+  req: any,
+  username: any,
+  password: any,
+  done: any
+) => {
   console.log("LOGIN");
   const user = await userModel.findOne({ username });
+  console.log("USER!!!!!!: ", user);
 
   if (!user || (await user.isValidPassword(password)) === false) {
+    console.log("inside if for login in auth.ts");
     return done(null, false, { message: "Invalid Username/Password" });
   }
   console.log("SALIO TODO BIEN");
@@ -32,11 +43,16 @@ const login = async (req: any, username: any, password: any, done: any) => {
  * Verificamos que el username o email no este tomado, caso contrario devolvemos false en done indicando que hubo un error
  * Creamos el usuario nuevo y devolvemos el usuario creado a done
  */
-const signup = async (req: any, username: any, password: any, done: any) => {
+const signup: VerifyFunctionWithRequest = async (
+  req: any,
+  username: any,
+  password: any,
+  done: any
+) => {
   try {
     console.log("SIGN UP FUNCTION");
-    const { username, password } = req.body;
-    console.log(req.body);
+    const { username, password, name, phone, address, age } = req.body;
+    console.log("BODY IN SIGNUP FUNCTION IN AUTH.TS: ", req.body);
     // Nota: Username y password no se verifica porque ya lo hace passport:
     // if (!email || !firstName || !lastName) {
     //   console.log("Invalid body fields");
@@ -47,7 +63,6 @@ const signup = async (req: any, username: any, password: any, done: any) => {
       $or: [{ username: username }, { password: password }],
     };
 
-    console.log(query);
     const user = await userModel.findOne(query);
 
     if (user) {
@@ -58,11 +73,13 @@ const signup = async (req: any, username: any, password: any, done: any) => {
       const userData = {
         username,
         password,
+        name,
+        phone,
+        address,
+        age,
       };
-      console.log("USERDATA!: ", userData);
 
       const newUser = await userModel.create(userData);
-
       return done(null, newUser);
     }
   } catch (error) {
@@ -70,8 +87,8 @@ const signup = async (req: any, username: any, password: any, done: any) => {
   }
 };
 
-export const loginFunc = new LocalStrategy(strategyOptions, login);
-export const signUpFunc = new LocalStrategy(strategyOptions, signup);
+export const loginFunc = new Strategy(strategyOptions, login);
+export const signUpFunc = new Strategy(strategyOptions, signup);
 
 /**
  * Express-session crea un objeto session en la request
@@ -80,7 +97,7 @@ export const signUpFunc = new LocalStrategy(strategyOptions, signup);
  * Esta funcion agarra el usuario que recibio y lo guarda en req.session.passport
  * En este caso estamos creando una key llamado user con la info del usuario dentro de req.session.passport
  */
-passport.serializeUser((user, done) => {
+passport.serializeUser((user: any, done) => {
   console.log("Se Ejecuta el serializeUser");
   //Notar que vamos a guardar en req.session.passport el id del usuario. nada mas
   done(null, user._id);

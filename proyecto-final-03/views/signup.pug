@@ -9,13 +9,22 @@ html
             form(action="/api/users/signup", method="POST")
                 div
                     label(for="username")="Email"
-                    input(id="email" type="text" name="username")
+                    input(id="email" type="email" name="username")
                 div
                     label(for="password")="Password"
                     input(id="password" type="text" name="password")
                 div
-                    //- label(for="thumbnail")="Imagen del producto (url)"
-                    //- input(id="thumbnailInput" type="text" name="thumbnail")
+                    label(for="name")="Name"
+                    input(id="name" type="text" name="name")
+                div
+                    label(for="address")="Address"
+                    input(id="address" type="text" name="address")
+                div
+                    label(for="age")="Age"
+                    input(id="age" type="number" name="age")
+                div
+                    label(for="phone")="Phone"
+                    input(id="phone" type="tel" name="phone" pattern="0-9]{2}-[0-9]{3}-[0-9]{3}-[0-9]{4}")
                 button(id="")="signup"
         div
             a(href="/api/users/login")="Log in"

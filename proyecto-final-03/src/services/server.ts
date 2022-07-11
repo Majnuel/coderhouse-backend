@@ -8,28 +8,28 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import cookieParser from "cookie-parser";
 import { signUpFunc, loginFunc } from "./auth";
+import { isLoggedIn } from "../middlewares/auth";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// public folder and template engine:
 app.use(express.static("public"));
 app.set("view engine", "pug");
 app.set("views", "./views");
 
-const ttlInSeconds = 10;
+const ttlInSeconds = 60;
 
 const StoreOptions = {
   store: MongoStore.create({
     mongoUrl: config.MONGO_ATLAS_CONNECTION_STRING,
     crypto: {
-      secret: "squirrel",
+      secret: config.CRYPTO,
     },
   }),
-  secret: "geheimnis",
+  secret: config.MONGO_STORE_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: ttlInSeconds * 1000,
+    maxAge: ttlInSeconds * 1000 * 10,
   },
 };
 app.use(cookieParser());
@@ -37,18 +37,19 @@ app.use(session(StoreOptions));
 
 //Indicamos que vamos a usar passport en todas nuestras rutas
 app.use(passport.initialize());
-
 //Permitimos que passport pueda manipular las sessiones de nuestra app
 app.use(passport.session());
-
 // loginFunc va a ser una funcion que vamos a crear y va a tener la logica de autenticacion
 // Cuando un usuario se autentique correctamente, passport va a devolver en la session la info del usuario
-// passport.use("login", loginFunc);
-
+passport.use("login", loginFunc);
 //signUpFunc va a ser una funcion que vamos a crear y va a tener la logica de registro de nuevos usuarios
 passport.use("signup", signUpFunc);
 
 app.use("/api", mainRouter);
+
+app.get("/", isLoggedIn, (req, res) => {
+  res.render("main.pug");
+});
 
 app.use((req, res) => {
   res.status(404).json({

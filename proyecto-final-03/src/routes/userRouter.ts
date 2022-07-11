@@ -23,8 +23,22 @@ userRouter.post("/signup", validateFields, (req, res, next) => {
     }
     if (!user) return res.status(401).json({ data: info });
 
-    res.json({ msg: "signup OK" });
+    res.redirect("/api/users/login");
   })(req, res, next);
+});
+
+userRouter.post("/login", passport.authenticate("login"), function (req, res) {
+  console.log("user: ", req.user);
+  res.redirect("/");
+});
+
+userRouter.post("/logout", (req, res, next) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/api/users/login");
+  });
 });
 
 export { userRouter };

@@ -17,13 +17,13 @@ const strategyOptions = {
  * Opcionalmente podemos mandar como tercer argumento un mensaje de error
  */
 const login = async (req, username, password, done) => {
-  console.log("LOGIN");
+  console.log("BEGIN LOGIN SEQUENCE");
   const user = await UserModel.findOne({ username });
 
   if (!user || (await user.isValidPassword(password)) === false) {
     return done(null, false, { message: "Invalid Username/Password" });
   }
-  console.log("SALIO TODO BIEN");
+  console.log("LOGIN SUCCESSFUL");
   return done(null, user);
 };
 

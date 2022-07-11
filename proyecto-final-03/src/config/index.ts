@@ -6,4 +6,6 @@ export default {
   MONGO_ATLAS_CONNECTION_STRING:
     process.env.MONGO_ATLAS_CONNECTION_STRING || "mongoSRV",
   PORT: process.env.PORT || 8080,
+  CRYPTO: process.env.CRYPTO_SECRET || "Crypto secret word",
+  MONGO_STORE_SECRET: process.env.MONGO_STORE_SECRET || "mongo store secret",
 };
