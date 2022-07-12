@@ -1,6 +1,9 @@
 import express from "express";
 import passport from "passport";
+import { createCart } from "../controllers/carts";
+import { isLoggedIn } from "../middlewares/auth";
 import validateFields from "../middlewares/validateFields";
+import { cartModel } from "../models/carts";
 
 const userRouter = express.Router();
 
@@ -16,14 +19,16 @@ userRouter.get("/login", (req, res) => {
 
 userRouter.post("/signup", validateFields, (req, res, next) => {
   passport.authenticate("signup", (err, user, info) => {
-    console.log("Info SIGNUP");
+    console.log("Info SIGNUP in userRouter.ts : ");
     console.log(err, user, info);
     if (err) {
       return next(err);
+    } else if (!user) {
+      return res.status(401).json({ data: info });
+    } else {
+      createCart(user._id);
+      res.redirect("/api/users/login");
     }
-    if (!user) return res.status(401).json({ data: info });
-
-    res.redirect("/api/users/login");
   })(req, res, next);
 });
 
@@ -33,11 +38,21 @@ userRouter.post("/login", passport.authenticate("login"), function (req, res) {
 });
 
 userRouter.post("/logout", (req, res, next) => {
-  req.logout(function (err) {
+  req.session.destroy(function (err) {
     if (err) {
       return next(err);
     }
     res.redirect("/api/users/login");
+  });
+});
+
+userRouter.get("/user-data", isLoggedIn, async (req, res) => {
+  const userID = req.session.passport?.user;
+  const cart = await cartModel.find({ owner: `${userID}` });
+  res.json({
+    msg: "User data",
+    userdata: req.user,
+    cart: cart[0].products,
   });
 });
 

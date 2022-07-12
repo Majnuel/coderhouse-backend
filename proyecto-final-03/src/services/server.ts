@@ -9,6 +9,7 @@ import MongoStore from "connect-mongo";
 import cookieParser from "cookie-parser";
 import { signUpFunc, loginFunc } from "./auth";
 import { isLoggedIn } from "../middlewares/auth";
+import { logger } from "./logger";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -59,7 +60,9 @@ app.use((req, res) => {
 
 const server = app.listen(config.PORT, () => {
   DB();
-  console.log("SERVER UP AND RUNNING ON PORT: ", config.PORT);
+  logger.info(
+    `SERVER UP AND RUNNING ON PORT ${config.PORT} - PID WORKER ${process.pid}`
+  );
 });
 
 const DB = async () => {
@@ -67,5 +70,5 @@ const DB = async () => {
 };
 
 server.on("error", (err) => {
-  console.log("ERROR: ", err);
+  logger.error("ERROR: ", err);
 });

@@ -4,7 +4,10 @@ import {
   VerifyFunctionWithRequest,
   IStrategyOptionsWithRequest,
 } from "passport-local";
+import config from "../config";
 import { userModel } from "../models/users";
+import { logger } from "./logger";
+import { EmailService } from "./mailer";
 
 const strategyOptions: IStrategyOptionsWithRequest = {
   usernameField: "username",
@@ -25,15 +28,14 @@ const login: VerifyFunctionWithRequest = async (
   password: any,
   done: any
 ) => {
-  console.log("LOGIN");
+  logger.verbose("LOGIN");
   const user = await userModel.findOne({ username });
-  console.log("USER!!!!!!: ", user);
+  logger.verbose("USER: ", user);
 
   if (!user || (await user.isValidPassword(password)) === false) {
-    console.log("inside if for login in auth.ts");
     return done(null, false, { message: "Invalid Username/Password" });
   }
-  console.log("SALIO TODO BIEN");
+  logger.verbose("Passport login function execution sucessful");
   return done(null, user);
 };
 
@@ -50,9 +52,9 @@ const signup: VerifyFunctionWithRequest = async (
   done: any
 ) => {
   try {
-    console.log("SIGN UP FUNCTION");
+    logger.verbose("SIGN UP FUNCTION");
     const { username, password, name, phone, address, age } = req.body;
-    console.log("BODY IN SIGNUP FUNCTION IN AUTH.TS: ", req.body);
+    logger.verbose("BODY IN SIGNUP FUNCTION IN AUTH.TS: ", req.body);
     // Nota: Username y password no se verifica porque ya lo hace passport:
     // if (!email || !firstName || !lastName) {
     //   console.log("Invalid body fields");
@@ -66,8 +68,8 @@ const signup: VerifyFunctionWithRequest = async (
     const user = await userModel.findOne(query);
 
     if (user) {
-      console.log("User already exists");
-      console.log(user);
+      logger.verbose("User already exists");
+      logger.verbose(user);
       return done(null, false, { message: "User already exists" });
     } else {
       const userData = {
@@ -78,8 +80,12 @@ const signup: VerifyFunctionWithRequest = async (
         address,
         age,
       };
-
       const newUser = await userModel.create(userData);
+      EmailService.sendEmail(
+        config.GMAIL_EMAIL,
+        "Nuevo registro",
+        `<h1>Nuevo registro</h1><h4>Datos:</h4><ul><li>username: ${username}</li><li>name: ${name}</li><li>phone: ${phone}</li><li>adress: ${address}</li><li>age: ${age}</li></ul>`
+      );
       return done(null, newUser);
     }
   } catch (error) {
@@ -98,7 +104,7 @@ export const signUpFunc = new Strategy(strategyOptions, signup);
  * En este caso estamos creando una key llamado user con la info del usuario dentro de req.session.passport
  */
 passport.serializeUser((user: any, done) => {
-  console.log("Se Ejecuta el serializeUser");
+  logger.verbose("Se Ejecuta el serializeUser");
   //Notar que vamos a guardar en req.session.passport el id del usuario. nada mas
   done(null, user._id);
 });
@@ -107,7 +113,7 @@ passport.serializeUser((user: any, done) => {
  * DeserializeUser Permite tomar la info que mandamos con el serializeUser para crear el objeto req.user
  */
 passport.deserializeUser((userId, done) => {
-  console.log("Se Ejecuta el desserializeUser");
+  logger.verbose("Se Ejecuta el desserializeUser");
   //Notar que recibimos el userId en la funcion (que es lo que mandamos en el done del serializedUser)
   //Buscamos el usuario con ese id y lo retornamos. El resultado va a estar en req.user
   userModel.findById(userId).then((user: any) => {

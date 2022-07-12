@@ -15,7 +15,7 @@ export const checkBodyProduct = async (
     !categoryID ||
     !thumbnailURL
   ) {
-    res.status(400).json({ msg: "missing body fields" });
+    return res.status(400).json({ msg: "missing body fields" });
   }
   next();
 };

@@ -3,4 +3,6 @@ node_modules/
 .env
 to-do.txt
 messages.sqlite
+dist/
+logs/
 

@@ -3,9 +3,14 @@ const mainRouter = express.Router();
 import { productsRouter } from "./productsRouter";
 import { cartRouter } from "./cartRouter";
 import { userRouter } from "./userRouter";
+import { isLoggedIn } from "../middlewares/auth";
 
-mainRouter.get("/", (req, res) => {
-  res.status(200).json({ msg: "main API endpoint" });
+mainRouter.get("/", isLoggedIn, (req, res) => {
+  res.status(200).json({
+    msg: "main API endpoint",
+    session_info: req.session.passport?.user,
+    user: req.user,
+  });
 });
 
 mainRouter.use("/products", productsRouter);

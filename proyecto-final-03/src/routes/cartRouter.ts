@@ -1,20 +1,17 @@
 import express from "express";
 const cartRouter = express.Router();
 import { isAdmin } from "../middlewares/isAdmin";
+import { isLoggedIn } from "../middlewares/auth";
 import {
   getAllCarts,
-  createCart,
-  deleteCart,
   getCartProducts,
   addProductToCart,
   deleteProductFromCart,
 } from "../controllers/carts";
 
 cartRouter.get("/", isAdmin, getAllCarts);
-cartRouter.post("/", createCart);
-cartRouter.delete("/:id", deleteCart);
-cartRouter.get("/:id/products", getCartProducts);
-cartRouter.post("/:cartId/products/:productId", addProductToCart);
-cartRouter.delete("/:cartId/products/:productId", deleteProductFromCart);
+cartRouter.get("/products", isLoggedIn, getCartProducts);
+cartRouter.post("/:productId", isLoggedIn, addProductToCart);
+cartRouter.delete("/:productId", isLoggedIn, deleteProductFromCart);
 
 export { cartRouter };
