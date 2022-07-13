@@ -1,5 +1,6 @@
 import config from "../config";
 import nodemailer from "nodemailer";
+import { logger } from "./logger";
 
 class Email {
   private owner;
@@ -21,7 +22,7 @@ class Email {
       },
     });
 
-    this.transporter.verify().then(() => console.log("READY To Send Email"));
+    this.transporter.verify().then(() => logger.info("EMAIL SERVICE READY"));
   }
 
   async sendEmail(dest: string, subject: string, content: string) {

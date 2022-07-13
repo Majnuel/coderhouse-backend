@@ -56,7 +56,7 @@ export const addProductToCart = async (
     //   "ID OF CART TO UPDATE!!: ",
     //   JSON.stringify(cartToUpdate[0]._id).substring(1, 25)
     // );
-    // console.log("PRODUCT TO ADD: ", productToAdd);
+    console.log("PRODUCT TO ADD: ", productToAdd.name);
     // console.log("QUANTITY: ", quantity);
 
     // no funciona, entra directamente al catch:
@@ -78,8 +78,9 @@ export const addProductToCart = async (
       return res.json({ msg: "quantity not available" });
     } else {
       existingProductsCopy.push({
-        productId: productId,
+        product: productToAdd.name,
         quantity: quantity,
+        productId: productId,
       });
     }
 
