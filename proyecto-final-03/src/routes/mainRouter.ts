@@ -8,8 +8,6 @@ import { isLoggedIn } from "../middlewares/auth";
 mainRouter.get("/", isLoggedIn, (req, res) => {
   res.status(200).json({
     msg: "main API endpoint",
-    session_info: req.session.passport?.user,
-    user: req.user,
   });
 });
 

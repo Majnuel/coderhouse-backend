@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 import bcrypt from "bcrypt";
 import express from "express";
+import { logger } from "../services/logger";
 
 const usersCollection = "users";
 
@@ -12,6 +13,7 @@ const userSchema = new mongoose.Schema(
     address: { type: String, required: true, max: 120 },
     age: { type: Number, required: true },
     phone: { type: String, required: true },
+    admin: { type: Boolean, default: false },
   },
   { timestamps: true, versionKey: false }
 );
@@ -24,11 +26,11 @@ userSchema.pre(
   async function (this: typeof userSchema, next: express.NextFunction) {
     const user = this;
     const hash = await bcrypt.hash(user.password, 10);
-    console.log("encrypting!!!");
+    logger.verbose("encrypting!!!");
     this.password = hash;
-    console.log("en pre:");
-    console.log("user: ", user);
-    console.log("hash: ", hash);
+    logger.verbose("en pre:");
+    logger.verbose("user: ", user);
+    logger.verbose("hash: ", hash);
     next();
   }
 );

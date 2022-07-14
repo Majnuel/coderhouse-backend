@@ -1,15 +1,15 @@
 import express from "express";
+import { retrieveUserData } from "../helpers/userDataFromReqObj";
 
-const admin = true;
 function isAdmin(
   req: express.Request,
   res: express.Response,
   next: express.NextFunction
 ) {
-  if (admin) {
+  if (retrieveUserData(req).admin) {
     next();
   } else {
-    res.status(401).json({ msg: "not authorized" });
+    res.status(401).json({ msg: "not authorized, ADMIN status is needed" });
   }
 }
 

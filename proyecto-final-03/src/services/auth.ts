@@ -31,6 +31,7 @@ const login: VerifyFunctionWithRequest = async (
   logger.verbose("LOGIN");
   const user = await userModel.findOne({ username });
   logger.verbose("USER: ", user);
+  logger.verbose(user);
 
   if (!user || (await user.isValidPassword(password)) === false) {
     return done(null, false, { message: "Invalid Username/Password" });

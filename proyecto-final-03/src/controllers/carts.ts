@@ -15,7 +15,7 @@ export const getAllCarts = async (
   }
 };
 
-// a cart will be created when a user signs up:
+// a cart will be created automatically when a user signs up:
 export const createCart = async (id: string) => {
   try {
     const newCart = { owner: id, products: [] };
@@ -56,7 +56,7 @@ export const addProductToCart = async (
     //   "ID OF CART TO UPDATE!!: ",
     //   JSON.stringify(cartToUpdate[0]._id).substring(1, 25)
     // );
-    console.log("PRODUCT TO ADD: ", productToAdd.name);
+    // console.log("PRODUCT TO ADD: ", productToAdd.name);
     // console.log("QUANTITY: ", quantity);
 
     // no funciona, entra directamente al catch:
@@ -69,7 +69,6 @@ export const addProductToCart = async (
       (item) => item.productId === productId
     );
 
-    console.log("index of item: ", indexOfItem);
     // //si ya existe el producto en el carro sumo la cantidad:
     if (indexOfItem !== -1 && productToAdd.stock >= quantity) {
       // console.log("index of item: true ");
@@ -83,8 +82,6 @@ export const addProductToCart = async (
         productId: productId,
       });
     }
-
-    console.log("existingProductsCopy: ", existingProductsCopy);
 
     await cartModel.findOneAndUpdate(
       { _id: JSON.stringify(cartToUpdate[0]._id).substring(1, 25) },
@@ -110,23 +107,24 @@ export const deleteProductFromCart = async (
     if (!productToAdd)
       return res.status(404).json({ msg: "product not found!" });
 
-    console.log("product to delete: ", productToAdd);
-    console.log("cart to update: ", cartToUpdate);
+    // console.log("product to delete: ", productToAdd);
+    // console.log("cart to update: ", cartToUpdate);
 
     const existingProductsCopy = [...cartToUpdate[0].products];
 
-    console.log("existingProductsCopy: ", existingProductsCopy);
+    // console.log("existingProductsCopy: ", existingProductsCopy);
 
     const indexOfItem = existingProductsCopy.findIndex(
       (item) => item.productId === productId
     );
 
-    console.log("index of item: ", indexOfItem);
+    // console.log("index of item: ", indexOfItem);
+
     // if cart does not have the product:
     if (indexOfItem === -1) {
       return res.status(404).json({ msg: "product not found in cart" });
     }
-    console.log("existingProductsCopy: ", existingProductsCopy);
+    // console.log("existingProductsCopy: ", existingProductsCopy);
 
     await cartModel.findOneAndUpdate(
       { _id: JSON.stringify(cartToUpdate[0]._id).substring(1, 25) },
