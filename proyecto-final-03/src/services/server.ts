@@ -5,11 +5,12 @@ import { initMongoDB } from "./database";
 import config from "../config";
 import passport from "passport";
 import session from "express-session";
-import MongoStore from "connect-mongo";
 import cookieParser from "cookie-parser";
 import { signUpFunc, loginFunc } from "./auth";
 import { isLoggedIn } from "../middlewares/auth";
 import { logger } from "./logger";
+import helmet from "helmet";
+import { StoreOptions } from "../config/mongo-store";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -17,24 +18,11 @@ app.use(express.static("public"));
 app.set("view engine", "pug");
 app.set("views", "./views");
 
-const ttlInSeconds = 60;
-
-const StoreOptions = {
-  store: MongoStore.create({
-    mongoUrl: config.MONGO_ATLAS_CONNECTION_STRING,
-    crypto: {
-      secret: config.CRYPTO,
-    },
-  }),
-  secret: config.MONGO_STORE_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: ttlInSeconds * 1000 * 10,
-  },
-};
 app.use(cookieParser());
 app.use(session(StoreOptions));
+
+// security middleware:
+app.use(helmet());
 
 //Indicamos que vamos a usar passport en todas nuestras rutas
 app.use(passport.initialize());

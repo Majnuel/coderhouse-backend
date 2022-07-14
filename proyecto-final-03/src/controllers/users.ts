@@ -12,14 +12,6 @@ import { EmailService } from "../services/mailer";
 import { SmsService } from "../services/twilio";
 import { createCart } from "./carts";
 
-export const userLogin = (req: express.Request, res: express.Response) => {
-  try {
-    logger.verbose(req.body);
-  } catch (err: any) {
-    res.status(404).json({ error: err.message });
-  }
-};
-
 export const signUpView = (req: express.Request, res: express.Response) => {
   res.render("signup.pug");
 };
