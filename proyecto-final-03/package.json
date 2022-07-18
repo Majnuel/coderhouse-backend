@@ -9,7 +9,9 @@
     "build-ts": "tsc",
     "prod:cluster": "npm run build-ts && pm2 start dist/services/server.js --watch -i max --name=app-en-cluster",
     "stop:all": "pm2 stop all",
-    "delete:all": "pm2 detele all"
+    "delete:all": "pm2 detele all",
+    "build": "npm install && node_modules/.bin/tsc",
+    "start": "npm run build && node dist/services/server.js"
   },
   "keywords": [],
   "author": "",
