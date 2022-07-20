@@ -9,11 +9,17 @@ import {
   updateProduct,
 } from "../controllers/products";
 import { checkBodyProduct } from "../middlewares/checkBodyProduct";
+import expressAsyncHandler from "express-async-handler";
 
-productsRouter.get("/", getAllProducts);
-productsRouter.post("/", checkBodyProduct, createProduct);
-productsRouter.get("/:id", getProductByID);
-productsRouter.delete("/:id", isAdmin, deleteByID);
-productsRouter.put("/:id", isAdmin, checkBodyProduct, updateProduct);
+productsRouter.get("/", expressAsyncHandler(getAllProducts));
+productsRouter.post("/", checkBodyProduct, expressAsyncHandler(createProduct));
+productsRouter.get("/:id", expressAsyncHandler(getProductByID));
+productsRouter.delete("/:id", isAdmin, expressAsyncHandler(deleteByID));
+productsRouter.put(
+  "/:id",
+  isAdmin,
+  checkBodyProduct,
+  expressAsyncHandler(updateProduct)
+);
 
 export { productsRouter };

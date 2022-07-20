@@ -26,6 +26,7 @@
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.1",
     "express": "^4.17.3",
+    "express-async-handler": "^1.2.0",
     "express-session": "^1.17.3",
     "helmet": "^5.1.0",
     "mongoose": "^6.3.3",

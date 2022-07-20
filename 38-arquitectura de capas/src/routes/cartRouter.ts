@@ -8,10 +8,19 @@ import {
   addProductToCart,
   deleteProductFromCart,
 } from "../controllers/carts";
+import expressAsyncHandler from "express-async-handler";
 
-cartRouter.get("/", isAdmin, getAllCarts);
-cartRouter.get("/products", isLoggedIn, getCartProducts);
-cartRouter.post("/:productId", isLoggedIn, addProductToCart);
-cartRouter.delete("/:productId", isLoggedIn, deleteProductFromCart);
+cartRouter.get("/", isAdmin, expressAsyncHandler(getAllCarts));
+cartRouter.get("/products", isLoggedIn, expressAsyncHandler(getCartProducts));
+cartRouter.post(
+  "/:productId",
+  isLoggedIn,
+  expressAsyncHandler(addProductToCart)
+);
+cartRouter.delete(
+  "/:productId",
+  isLoggedIn,
+  expressAsyncHandler(deleteProductFromCart)
+);
 
 export { cartRouter };

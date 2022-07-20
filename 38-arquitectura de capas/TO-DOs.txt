@@ -1,3 +1,7 @@
 catch error for when a product is deleted and a not valid productId is passed, same for updateProduct
 
 ijarse en el repo de ccineto, en la clase 22 cómo sacó socket.io del server y lo puso en su propio archivo
+
+procedimiento de session, isAutenticated, info de usuario en req.user y req.session explicado en clase de arquitectura de capas
+
+when deleting a product, make it so that if no quantity is sent, it'll remove all items of that product from the cart, otherwise it will remove the quantity
