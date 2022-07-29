@@ -1,0 +1,22 @@
+html
+    head
+        title="this is a message in the head tag"
+        //- link(rel="stylesheet", href="style.css")
+    body
+        h1(class="test")="3ra entrega proyecto final"
+        h3="Log in form"
+        div
+            form(action="/api/users/login", method="POST")
+                div
+                    label(for="username")="Username (email)"
+                    input(id="email" type="text" name="username")
+                div
+                    label(for="password")="Password"
+                    input(id="password" type="text" name="password")
+                div
+                    //- label(for="thumbnail")="Imagen del producto (url)"
+                    //- input(id="thumbnailInput" type="text" name="thumbnail")
+                button(id="")="log in"
+        div
+            a(href="/api/users/signup")="Sign Up"
+

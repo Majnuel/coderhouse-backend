@@ -2,6 +2,16 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+export enum PersistenceType {
+  Memoria = "MEM",
+  FileSystem = "FS",
+  MYSQL = "MYSQL",
+  SQLITE3 = "SQLITE3",
+  LocalMongo = "LOCAL-MONGO",
+  MongoAtlas = "MONGO-ATLAS",
+  Firebase = "FIREBASE",
+}
+
 export default {
   NODE_ENV: process.env.NODE_ENV || "development",
   MONGO_ATLAS_CONNECTION_STRING:
@@ -17,4 +27,5 @@ export default {
   TWILIO_TOKEN: process.env.TWILIO_TOKEN,
   TWILIO_PHONE_NUMBER: process.env.TWILIO_PHONE_NUMBER,
   ADMIN_PHONE_NUMBER: process.env.ADMIN_PHONE_NUMBER || "admin phone number",
+  PERSISTENCIA: process.env.PERSISTENCIA || PersistenceType.MongoAtlas,
 };

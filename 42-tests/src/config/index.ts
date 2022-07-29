@@ -2,10 +2,17 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+let mongoDBSRV = process.env.MONGO_ATLAS_CONNECTION_STRING || "mongoSRV";
+
+if (process.env.NODE_ENV === "test_e2e") {
+  console.log("entorno de test");
+  mongoDBSRV = process.env.MONGO_ATLAS_TEST_SRV || "testSRV";
+}
+
 export default {
   NODE_ENV: process.env.NODE_ENV || "development",
   MONGO_ATLAS_CONNECTION_STRING:
-    process.env.MONGO_ATLAS_CONNECTION_STRING || "mongoSRV",
+    mongoDBSRV || process.env.MONGO_ATLAS_CONNECTION_STRING,
   PORT: process.env.PORT || 8080,
   CRYPTO: process.env.CRYPTO_SECRET || "Crypto secret word",
   MONGO_STORE_SECRET: process.env.MONGO_STORE_SECRET || "mongo store secret",
@@ -16,5 +23,5 @@ export default {
   TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID || "account SID",
   TWILIO_TOKEN: process.env.TWILIO_TOKEN,
   TWILIO_PHONE_NUMBER: process.env.TWILIO_PHONE_NUMBER,
-  ADMIN_PHONE_NUMBER: process.env.ADMIN_PHONE_NUMBER || "admin phone number",
+  ADMIN_PHONE_NUMBER: process.env.ADMIN_PHONE_NUMBER || "admin phone number"
 };
