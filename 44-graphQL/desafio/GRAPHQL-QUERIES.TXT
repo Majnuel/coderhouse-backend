@@ -1,0 +1,49 @@
+SEARCH PRODUCT BY ID:
+query {
+  productById(_id: "62eea0e6fa15469f38f434b8") {
+    name, stock
+  }
+}
+
+SEARCH BY SOME FIELD:
+query {
+ productOne (filter: {name: "Grenade"}) {
+  name, price, stock
+}
+}
+
+SEARCH MULTIPLE PRODUCTS BY ID:
+query {
+  productsByIds(_ids: ["62eea0e6fa15469f38f434b8", "62eea538c5331e4cdfebc70d"]) {
+    name, price, stock
+  }
+}
+
+SEARCH ALL PRODUCTS:
+query {
+  productsMany {
+   name, price, stock
+  }
+}
+
+CREATE A PRODUCT:
+mutation {
+  productCreateOne(record: {name: "Rocket Launcher", price: 8000, stock: 45, description: "boom!", categoryID: "weapons", thumbnailURL: "some url"}) {
+    recordId
+  }
+}
+
+UPDATE A PRODUCT:
+mutation {
+  productUpdateById(_id: "62eea538c5331e4cdfebc70d", record: {name: "Grenade!!"}) {
+    recordId
+  }
+}
+
+REMOVE BY ID:
+mutation {
+  productRemoveById (_id: "62eea538c5331e4cdfebc70d") {
+    recordId, record{name}
+  }
+}
+
